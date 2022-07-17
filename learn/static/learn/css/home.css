@@ -1,0 +1,22 @@
+*{
+    box-sizing: border-box;
+}
+body{
+    text-align: center;
+    margin: auto;
+    padding: 20px;
+    background-color: rgb(12, 236, 49);
+}
+h1{
+    color: black;
+}
+div{
+    background-color: antiquewhite;
+    text-align: center;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid blue;
+}
+h3{
+    color: crimson;
+}

@@ -1,0 +1,36 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{% static 'learn/base/css/main.css' %}" rel="stylesheet" />
+    <link href="{% static 'learn/base/css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'learn/base/css/dashboard.css' %}" rel="stylesheet" />
+    <link rel="icon" href="{% static 'learn/favicon.ico' %}" />
+</head>
+
+<body>
+    {% include 'learn/base/header.html' %}
+
+    <div class="container-fluid">
+        <div class="row">
+            {% include 'learn/base/nav.html' %}
+
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                {% block content %} {% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <script src="{% static 'learn/base/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"></script>
+    <script src="{% static 'learn/base/js/dashboard.js' %}"></script>
+    {% block script %}
+    {% endblock %}
+</body>
+
+</html>
