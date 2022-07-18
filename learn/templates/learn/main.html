@@ -1,12 +1,29 @@
 {% extends 'learn/base/index.html' %}
-
+{% load static %}
 {% block title %}
 Main
 {% endblock %}
 
-{% block content %}
-<h1>welcome</h1>
+{% block styles %}
+<link href="{% static 'learn/css/common.css' %}" rel="stylesheet" />
 {% endblock %}
 
-{% block script %}
+{% block content %}
+<div class="container mt-3">
+    <div class="container nvsmain pt-2 pb-1">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Library</li>
+            </ol>
+        </nav>
+    </div>
+    <h1 class="text-success">welcome</h1>
+    <div class="container">
+        <h5>hi</h5>
+        <h5>hi</h5>
+        <h5>hi</h5>
+        <h5>hi</h5>
+    </div>
+</div>
 {% endblock %}
