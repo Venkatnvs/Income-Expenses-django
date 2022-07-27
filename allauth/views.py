@@ -6,6 +6,11 @@ from django.contrib.auth.models import User
 from validate_email import validate_email
 from django.contrib import messages
 from django.core.mail import EmailMessage
+from .utils import token_generater
+from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse
 
 # Create your views here.
 
@@ -34,9 +39,13 @@ class Registration(View):
                 user.is_active=False
                 user.save()
 
+                uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+                domain = get_current_site(request).domain
+                link = reverse('activate', kwargs={'uidb64':uidb64, 'token':token_generater.make_token(user)})
+                activate_url = 'http://'+domain+link
 
                 email_subject = 'Activate your account'
-                email_body = 'test'
+                email_body = 'Hi ' + user.username + " \n Please use this link to Verifi you identity \n" +activate_url
 
                 email = EmailMessage(
                     email_subject,
@@ -79,4 +88,24 @@ class EmailValidation(View):
 
 class Verification(View):
     def get(self, request, uidb64, token):
+        try:
+            id = force_str(urlsafe_base64_decode(uidb64))
+            user = User.objects.get(pk=id)
+            if not token_generater.check_token(user, token):
+                return redirect('login'+'?message='+'User already activated')
+            if user.is_active:
+                return redirect('login')
+            user.is_active=True
+            user.save()
+            messages.success(request, 'Acccount activated successfully')
+            return redirect('login')
+
+        except Exception as e:
+            print(e)
+
         return redirect('login')
+
+
+class Login(View):
+    def get(self, request):
+        return render(request, 'allauth/login.html')
