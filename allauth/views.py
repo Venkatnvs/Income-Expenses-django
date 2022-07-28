@@ -11,6 +11,7 @@ from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeErr
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
+from django.contrib import auth
 
 # Create your views here.
 
@@ -109,3 +110,30 @@ class Verification(View):
 class Login(View):
     def get(self, request):
         return render(request, 'allauth/login.html')
+
+    def post(self, request):
+        username = request.POST['username']
+        password = request.POST['password']
+
+        if username and password:
+            user = auth.authenticate(username=username, password=password)
+
+            if user:
+                if user.is_active:
+                    auth.login(request, user)
+                    messages.success(request, 'Welcome '+user.username+' You are now loggined')
+                    return redirect('home')
+
+                messages.error(request, 'Account is not activated, Please check your email')
+                return render(request, 'allauth/login.html')
+            messages.error(request, 'Invalid credintails, try again')
+            return render(request, 'allauth/login.html')
+
+        messages.error(request, 'Please fill all fields')
+        return render(request, 'allauth/login.html')
+
+class Logout(View):
+    def post(self, request):
+        auth.logout(request)
+        messages.success(request, 'You have been logged out')
+        return redirect('login')
