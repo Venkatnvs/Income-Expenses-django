@@ -11,20 +11,47 @@ Main
 {% block content %}
 <div class="container mt-3">
     {% include 'allauth/messages.html' %}
-    <div class="container nvsmain pt-2 pb-1">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Library</li>
-            </ol>
-        </nav>
+    <div class="row">
+    <div class="col">
+        <div class="container nvsmain pt-2 pb-1">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Expenses</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">My Expenses</li>
+                </ol>
+            </nav>
+        </div>
     </div>
-    <h1 class="text-success">welcome</h1>
-    <div class="container">
-        <h5>hi</h5>
-        <h5>hi</h5>
-        <h5>hi</h5>
-        <h5>hi</h5>
+    <div class="col-md-2">
+        <a href="{% url 'add-expense' %}" class="btn btn-primary">Add Expenses</a>
+    </div>
+    </div>
+
+    <div class="container mt-3">
+        {% if expenses.count %}
+        <table class="table table-stripped table-hover">
+            <thead>
+                <tr>
+                    <th>Amount (currency)</th>
+                    <th>Category</th>
+                    <th>Decreption</th>
+                    <th>Date</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expense in expenses %}
+                <tr>
+                    <td>{{expense.amount}}</td>
+                    <td>{{expense.category}}</td>
+                    <td>{{expense.decription}}</td>
+                    <td>{{expense.date}}</td>
+                    <td><a class="link" href="{% url 'expense-edit' expense.id %}"><span data-feather="edit" class="align-text-bottom"></span></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'learn/base/index.html' %} 
+{% block title %} General Settings {%endblock %} 
+{% block content %}
+<div class="container mt-3">
+    {% include 'allauth/messages.html' %}
+    <h3>Prefered currency</h3>
+    <form action="{% url 'preferences' %}" method="post">
+        {% csrf_token %}
+        <div class="input-group">
+            <select name="currency" class="form-select" id="inputGroupSelect04"
+                aria-label="Example select with button addon">
+                {% if user_prefer.currency %}
+                <option name="currency" value="{{user_prefer.currency}}" selected>{{user_prefer.currency}}</option>
+                {% else %}
+                <option name="currency" selected>Choose...</option>
+                {% endif %}
+                
+                {% for currency in currencies %}
+                <option name="currency" value="{{currency.name}} - {{currency.value}}">
+                    {{currency.name}} - {{currency.value}}
+                </option>
+                {% endfor %}
+            </select>
+            <input class="btn btn-outline-secondary" type="submit" value="Save" />
+        </div>
+    </form>
+
+    <hr />
+</div>
+{% endblock %}
