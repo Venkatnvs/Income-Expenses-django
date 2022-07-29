@@ -2,14 +2,37 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from .models import Category, Expense
 from django.contrib import messages
-from django.utils.timezone import now
+from django.core.paginator import Paginator
+from django.http import JsonResponse
+import json
+from userprefer.models import Userprefer
+
+def search_expenses(request):
+    if request.method == 'POST':
+        search_str = json.loads(request.body).get('searchText')
+        expenses = Expense.objects.filter(
+            amount__istartswith=search_str, owner=request.user) | Expense.objects.filter(
+            date__istartswith=search_str, owner=request.user) | Expense.objects.filter(
+            decription__icontains=search_str, owner=request.user) | Expense.objects.filter(
+            category__icontains=search_str, owner=request.user)
+
+        data = expenses.values()
+        return JsonResponse(list(data), safe=False)
+
+
 
 @login_required
 def home(request):
     #categories = Category.objects.all()
     expenses = Expense.objects.filter(owner=request.user)
+    paginator= Paginator(expenses, 5)
+    page_no = request.GET.get('page')
+    page_obj = Paginator.get_page(paginator, page_no)
+    currency = Userprefer.objects.get(user=request.user).currency
     context = {
-        'expenses':expenses
+        'expenses':expenses,
+        'page_obj':page_obj,
+        'currency':currency
     }
     return render(request, 'learn/main.html', context)
 

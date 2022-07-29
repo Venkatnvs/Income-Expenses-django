@@ -1,7 +1,7 @@
 {% extends 'learn/base/index.html' %}
 {% load static %}
 {% block title %}
-Edit Expenses
+Edit Income
 {% endblock %}
 {% block styles %}
 <link href="{% static 'learn/css/common.css' %}" rel="stylesheet" />
@@ -14,20 +14,20 @@ Edit Expenses
         <div class="container nvsmain pt-2 pb-1">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Expenses</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Edit Expenses</li>
+                    <li class="breadcrumb-item"><a href="{% url 'income' %}">Income</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Edit Income</li>
                 </ol>
             </nav>
         </div>
     </div>
     <div class="col-md-2">
-        <a class="btn btn-danger" href="{% url 'expense-delete' expense.id %}"><span data-feather="trash" class="align-text-center"></span>Delete</a>
+        <a class="btn btn-danger" href="{% url 'income-delete' income.id %}"><span data-feather="trash" class="align-text-center"></span>Delete</a>
     </div>
 </div>
 
 <div class="card mt-3">
     <div class="card-body">
-            <form action="{% url 'expense-edit' expense.id %}" method="post">
+            <form action="{% url 'income-edit' income.id %}" method="post">
             {% csrf_token %}
             {% include 'allauth/messages.html' %}
             <div class="form-group mb-2">
@@ -39,17 +39,17 @@ Edit Expenses
                 <input type="text" class="form-control form-control-sm" name="decription" id="inputdecription" value="{{values.decription}}">
             </div>
             <div class="form-group mb-2">
-                <label for="inputselect">Category</label>
-                <select class="form-control form-control-sm" name="category" id="inputselect">
-                    <option selected value="{{values.category}}" name="category">{{values.category}}</option>
-                    {% for category in categories %}
-                    <option name="category" value="{{category.name}}">{{category.name}}</option>
+                <label for="inputselect">Sources</label>
+                <select class="form-control form-control-sm" name="source" id="inputselect">
+                    <option selected value="{{values.source}}" name="source">{{values.source}}</option>
+                    {% for source in sources %}
+                    <option name="source" value="{{source.name}}">{{source.name}}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="form-group mb-2">
-                <label for="inputdate">Date of Expense</label>
-                <input type="date" class="form-control form-control-sm" name="expense_date" id="inputdate" value="{{values.date | date:'Y-m-d'}}">
+                <label for="inputdate">Date of Income</label>
+                <input type="date" class="form-control form-control-sm" name="income_date" id="inputdate" value="{{values.date | date:'Y-m-d'}}">
             </div>
             <input type="submit" value="Save" class="btn btn-primary btn-primary-sm">
         </form>

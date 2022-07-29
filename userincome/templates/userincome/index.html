@@ -1,7 +1,7 @@
 {% extends 'learn/base/index.html' %}
 {% load static %}
 {% block title %}
-Main
+Income
 {% endblock %}
 
 {% block styles %}
@@ -16,14 +16,14 @@ Main
         <div class="container nvsmain pt-2 pb-1">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Expenses</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">My Expenses</li>
+                    <li class="breadcrumb-item"><a href="#">Income</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">My Income</li>
                 </ol>
             </nav>
         </div>
     </div>
     <div class="col-md-2">
-        <a href="{% url 'add-expense' %}" class="btn btn-primary">Add Expenses</a>
+        <a href="{% url 'add-income' %}" class="btn btn-primary">Add Income</a>
     </div>
     </div>
 
@@ -37,25 +37,25 @@ Main
     </div>
 
     <div class="container table-start mt-2">
-        {% if expenses.count %}
+        {% if income.count %}
         <table class="table table-stripped table-hover">
             <thead>
                 <tr>
                     <th>Amount ({{currency}})</th>
-                    <th>Category</th>
+                    <th>Source</th>
                     <th>Decreption</th>
                     <th>Date</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
-                {% for expense in page_obj %}
+                {% for income in page_obj %}
                 <tr>
-                    <td>{{expense.amount}}</td>
-                    <td>{{expense.category}}</td>
-                    <td>{{expense.decription}}</td>
-                    <td>{{expense.date}}</td>
-                    <td><a class="link" href="{% url 'expense-edit' expense.id %}"><span data-feather="edit" class="align-text-bottom"></span></a></td>
+                    <td>{{income.amount}}</td>
+                    <td>{{income.source}}</td>
+                    <td>{{income.decription}}</td>
+                    <td>{{income.date}}</td>
+                    <td><a class="link" href="{% url 'income-edit' income.id %}"><span data-feather="edit" class="align-text-bottom"></span></a></td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -68,7 +68,7 @@ Main
             <thead>
                 <tr>
                     <th>Amount ({{currency}})</th>
-                    <th>Category</th>
+                    <th>Source</th>
                     <th>Decreption</th>
                     <th>Date</th>
                     <th></th>
@@ -103,5 +103,5 @@ Main
 
 
 {% block script %}
-<script src="{% static 'learn/js/main.js' %}"></script>
+<script src="{% static 'userincome/js/income.js' %}"></script>
 {% endblock %}
