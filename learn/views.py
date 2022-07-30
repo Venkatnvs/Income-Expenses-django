@@ -1,11 +1,23 @@
+from asyncore import write
+from base64 import encode
+from multiprocessing.spawn import import_main_path
+import string
+from urllib import response
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from .models import Category, Expense
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 import json
 from userprefer.models import Userprefer
+import datetime
+import csv
+import xlwt
+from django.template.loader import render_to_string
+from weasyprint import HTML
+import tempfile
+from django.db.models import Sum
 
 def search_expenses(request):
     if request.method == 'POST':
@@ -28,7 +40,11 @@ def home(request):
     paginator= Paginator(expenses, 5)
     page_no = request.GET.get('page')
     page_obj = Paginator.get_page(paginator, page_no)
-    currency = Userprefer.objects.get(user=request.user).currency
+    currency_check = Userprefer.objects.filter(user=request.user)
+    if currency_check.exists():
+        currency = Userprefer.objects.get(user=request.user).currency
+    else:
+        currency= None
     context = {
         'expenses':expenses,
         'page_obj':page_obj,
@@ -114,3 +130,93 @@ def expense_delete(request, id):
     messages.success(request, 'Expense is removed')
     return redirect('home')
 
+def expenses_summery(request):
+    today_date = datetime.date.today()
+    six_months_ago =today_date - datetime.timedelta(days=30*6)
+    expenses = Expense.objects.filter(owner=request.user, date__gte=six_months_ago, date__lte=today_date)
+    finalresult= {}
+
+    def get_category(expenses):
+        return expenses.category
+
+    category_list = list(set(map(get_category, expenses)))
+
+    def get_expense_category_amount(category):
+        amount = 0
+        filter_by_category = expenses.filter(category=category)
+        for item in filter_by_category:
+            amount += item.amount
+        return amount
+
+    for x in expenses:
+        for y in category_list:
+            finalresult[y]=get_expense_category_amount(y)
+
+    return JsonResponse({'expense_category_amount':finalresult}, safe=False)
+
+
+def Expenses_Stats(request):
+    return render(request, 'learn/stats.html')
+
+
+
+def export_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=Expenses'+str(datetime.datetime.now())+'.csv'
+    writer = csv.writer(response)
+    writer.writerow(['Amount','Decription','Category','Date'])
+
+    expenses = Expense.objects.filter(owner=request.user)
+
+    for expense in expenses:
+        writer.writerow([expense.amount, expense.decription, expense.category, expense.date])
+
+    return response
+
+
+def export_excel(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=Expenses'+str(datetime.datetime.now())+'.xls'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Expenses')
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['Amount','Decription','Category','Date']
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    font_style =  xlwt.XFStyle()
+
+    rows = Expense.objects.filter(owner=request.user).values_list('amount','decription','category','date')
+
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, str(row[col_num]), font_style)
+
+    wb.save(response)
+    return response
+
+def export_pdf(request):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; attachment; filename=Expenses'+str(datetime.datetime.now())+'.pdf'
+    response['Content-Transfer-Encoding'] ='binary'
+
+    expenses = Expense.objects.filter(owner=request.user)
+    sum = expenses.aggregate(Sum('amount'))
+
+    html_string = render_to_string('learn/pdf-output.html', {'expenses':expenses,'total':sum})
+    html = HTML(string=html_string)
+    result = html.write_pdf()
+
+    with tempfile.NamedTemporaryFile(delete=True) as output:
+        output.write(result)
+        output.flush()
+
+        output = open(output.name, 'rb')
+        response.write(output.read())
+
+    return response

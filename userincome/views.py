@@ -31,7 +31,11 @@ def index(request):
     paginator= Paginator(income, 5)
     page_no = request.GET.get('page')
     page_obj = Paginator.get_page(paginator, page_no)
-    currency = Userprefer.objects.get(user=request.user).currency
+    currency_check = Userprefer.objects.filter(user=request.user)
+    if currency_check.exists():
+        currency = Userprefer.objects.get(user=request.user).currency
+    else:
+        currency= None
     context = {
         'income':income,
         'page_obj':page_obj,
@@ -75,7 +79,7 @@ def income_edit(request, id):
     context = {
         'income':income,
         'values':income,
-        'source':sources
+        'sources':sources
         }
     if request.method == 'GET':
         return render(request, 'userincome/edit_income.html', context)
