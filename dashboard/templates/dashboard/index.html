@@ -1,0 +1,36 @@
+{% extends 'learn/base/index.html' %}
+{% load static %}
+{% block title %}
+DASHBOARD
+{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+    {% include 'allauth/messages.html' %}
+    <h2>DASHBOARD</h2>
+    <hr>
+    <div class="row">
+        <h5>Last 1 Month Expenses and Income</h5>
+        <select name="graph" id="">
+            <option value="">bar</option>
+            <option value="">horizontalBar</option>
+            <option value="">pie</option>
+            <option value="">line</option>
+            <option value="">radar</option>
+            <option value="">doughnut</option>
+            <option value="">polarArea</option>
+        </select>
+        <div class="col">
+            <canvas id="myChart1" width="40" height="40"></canvas>
+        </div>
+        <div class="col">
+            <canvas id="myChart2" width="40" height="40"></canvas>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block script %}
+<script src="{% static 'dashboard/js/main.js' %}"></script>
+{% endblock %}

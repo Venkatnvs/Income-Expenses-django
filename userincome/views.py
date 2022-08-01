@@ -6,7 +6,8 @@ from userprefer.models import Userprefer
 from django.contrib import messages
 from django.http import JsonResponse
 import json
-
+import datetime
+from django.db.models import Sum
 
 # Create your views here.
 
@@ -28,6 +29,7 @@ def search_income(request):
 @login_required
 def index(request):
     income = UserIncome.objects.filter(owner=request.user)
+    sum = income.aggregate(Sum('amount'))
     paginator= Paginator(income, 5)
     page_no = request.GET.get('page')
     page_obj = Paginator.get_page(paginator, page_no)
@@ -39,7 +41,8 @@ def index(request):
     context = {
         'income':income,
         'page_obj':page_obj,
-        'currency':currency
+        'currency':currency,
+        'sum':sum['amount__sum']
     }
     return render(request, 'userincome/index.html', context)
 
@@ -118,4 +121,34 @@ def income_delete(request, id):
     income.delete()
     messages.success(request, 'Income is removed')
     return redirect('income')
+
+
+
+def income_summery(request):
+    today_date = datetime.date.today()
+    six_months_ago =today_date - datetime.timedelta(days=30*6)
+    income = UserIncome.objects.filter(owner=request.user, date__gte=six_months_ago, date__lte=today_date)
+    finalresult= {}
+
+    def get_source(income):
+        return income.source
+
+    source_list = list(set(map(get_source, income)))
+
+    def get_income_source_amount(source):
+        amount = 0
+        filter_by_source = income.filter(source=source)
+        for item in filter_by_source:
+            amount += item.amount
+        return amount
+
+    for x in income:
+        for y in source_list:
+            finalresult[y]=get_income_source_amount(y)
+
+    return JsonResponse({'income_source_amount':finalresult}, safe=False)
+
+
+def Income_Stats(request):
+    return render(request, 'userincome/stats.html')
 

@@ -58,6 +58,10 @@ Income
                     <td><a class="link" href="{% url 'income-edit' income.id %}"><span data-feather="edit" class="align-text-bottom"></span></a></td>
                 </tr>
                 {% endfor %}
+                <tr class="table-primary">
+                    <td>TOTAL : </td>
+                    <td>{{sum}}</td>
+                </tr>
             </tbody>
         </table>
         {% endif %}

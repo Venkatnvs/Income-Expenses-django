@@ -1,0 +1,25 @@
+{% extends 'learn/base/index.html' %}
+{% load static %}
+{% block title %}
+Add Source
+{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+<div class="card mt-3">
+    <h2>Add Source</h2>
+    <div class="card-body">
+            <form action="{% url 'add-source' %}" method="post">
+            {% csrf_token %}
+            {% include 'allauth/messages.html' %}
+            <div class="form-group mb-2">
+                <label for="inputsource">New</label>
+                <input type="text" class="form-control form-control-sm" name="source" id="inputsource" value="{{values.source}}">
+            </div>
+            <input type="submit" value="Submit" class="btn btn-primary btn-primary-sm">
+        </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

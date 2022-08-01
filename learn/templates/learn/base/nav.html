@@ -2,7 +2,7 @@
   <div class="position-sticky pt-3">
     <ul class="nav flex-column">
       <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">
+        <a class="nav-link active" aria-current="page" href="{% url 'dashboard-lastmonth' %}">
           <span data-feather="home" class="align-text-bottom"></span>
           Dashboard
         </a>
@@ -51,7 +51,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'income' %}">
+        <a class="nav-link" href="{% url 'income-stats' %}">
           <span data-feather="file-text" class="align-text-bottom"></span>
           Income Summery
         </a>

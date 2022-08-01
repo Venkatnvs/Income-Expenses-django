@@ -13,7 +13,7 @@ searchField.addEventListener('keyup', (e) => {
     if(searchValue.length > 0){
         tBody.innerHTML="";
         pagenation.style.display = "none";
-        fetch("/search-expenses",{
+        fetch("/expenses/search-expenses",{
             body:JSON.stringify({ searchText : searchValue}),method:"POST",
         }).then(res=>res.json()).then(data=>{
             console.log('data',data);

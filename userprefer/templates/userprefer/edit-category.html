@@ -1,0 +1,32 @@
+{% extends 'learn/base/index.html' %}
+{% load static %}
+{% block title %}
+Edit Catregory
+{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+<div class="card mt-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-5">
+                <h2>Edit Category</h2>
+            </div>
+            <div class="col-md-2">
+                <a class="btn btn-danger" href="{% url 'delete-category' category.id %}"><span data-feather="trash" class="align-text-center"></span>Delete</a>
+            </div>
+        </div>
+        <form action="{% url 'edit-category' category.id %}" method="post">
+            {% csrf_token %}
+            {% include 'allauth/messages.html' %}
+            <div class="form-group mb-2">
+                <label for="inputcategory">Category</label>
+                <input type="text" class="form-control form-control-sm" name="category" id="inputcategory" value="{{values.name}}">
+            </div>
+            <input type="submit" value="Submit" class="btn btn-primary btn-primary-sm">
+        </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

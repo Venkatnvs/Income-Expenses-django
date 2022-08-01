@@ -1,8 +1,3 @@
-from asyncore import write
-from base64 import encode
-from multiprocessing.spawn import import_main_path
-import string
-from urllib import response
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from .models import Category, Expense
@@ -15,7 +10,7 @@ import datetime
 import csv
 import xlwt
 from django.template.loader import render_to_string
-from weasyprint import HTML
+# from weasyprint import HTML
 import tempfile
 from django.db.models import Sum
 
@@ -37,6 +32,7 @@ def search_expenses(request):
 def home(request):
     #categories = Category.objects.all()
     expenses = Expense.objects.filter(owner=request.user)
+    sum = expenses.aggregate(Sum('amount'))
     paginator= Paginator(expenses, 5)
     page_no = request.GET.get('page')
     page_obj = Paginator.get_page(paginator, page_no)
@@ -48,7 +44,8 @@ def home(request):
     context = {
         'expenses':expenses,
         'page_obj':page_obj,
-        'currency':currency
+        'currency':currency,
+        'sum':sum['amount__sum']
     }
     return render(request, 'learn/main.html', context)
 
@@ -162,7 +159,7 @@ def Expenses_Stats(request):
 
 def export_csv(request):
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename=Expenses'+str(datetime.datetime.now())+'.csv'
+    response['Content-Disposition'] = 'inline; attachment; filename=Expenses'+str(datetime.datetime.now())+'.csv'
     writer = csv.writer(response)
     writer.writerow(['Amount','Decription','Category','Date'])
 

@@ -1,7 +1,7 @@
 {% extends 'learn/base/index.html' %}
 {% load static %}
 {% block title %}
-Expenses Summery
+Income summery
 {% endblock %}
 
 {% block styles %}
@@ -16,14 +16,14 @@ Expenses Summery
         <div class="container nvsmain pt-2 pb-1">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="#">Expenses Summery</a></li>
+                    <li class="breadcrumb-item"><a href="#">Income Summery</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Summery</li>
                 </ol>
             </nav>
         </div>
     </div>
     <div class="col-md-2">
-        <a href="{% url 'home' %}" class="btn btn-primary">Back</a>
+        <a href="{% url 'income' %}" class="btn btn-primary">Back</a>
     </div>
     </div>
     <canvas id="myChart" width="auto" height="auto"></canvas>
@@ -32,5 +32,5 @@ Expenses Summery
 
 
 {% block script %}
-<script src="{% static 'learn/js/stats.js' %}"></script>
+<script src="{% static 'userincome/js/stats.js' %}"></script>
 {% endblock %}

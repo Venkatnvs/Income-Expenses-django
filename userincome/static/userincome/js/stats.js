@@ -1,7 +1,20 @@
 const renderChat = (data, labels) => {
     const ctx = document.getElementById('myChart').getContext('2d');
+    const getRandomType = () => {
+        const types = [
+          "bar",
+          "horizontalBar",
+          "pie",
+          "line",
+          "radar",
+          "doughnut",
+          "polarArea",
+        ];
+        return types[Math.floor(Math.random() * types.length)];
+      };
+      const type = getRandomType();
     const myChart = new Chart(ctx, {
-        type: 'doughnut',
+        type: type,
         data: {
             labels: labels,
             datasets: [{
@@ -29,7 +42,7 @@ const renderChat = (data, labels) => {
         options: {
             title: {
                 display: true,
-                text: 'Expenses per category'
+                text: 'Income per category'
             }
         }
     });
@@ -37,12 +50,12 @@ const renderChat = (data, labels) => {
 };
 
 const getChartData=()=>{
-    fetch('/expenses/expenses_summery').then(res=>res.json()).then(result=>{
+    fetch('/income/income_summery').then(res=>res.json()).then(result=>{
         console.log('result',result)
-        const category_data = result.expense_category_amount;
+        const income_data = result.income_source_amount;
         const [labels,data] = [
-            Object.keys(category_data),
-            Object.values(category_data),
+            Object.keys(income_data),
+            Object.values(income_data),
         ];
         renderChat(data,labels);
     });
