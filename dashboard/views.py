@@ -1,13 +1,33 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from learn.models import Expense
 from userincome.models import UserIncome
+from .models import Graphprefer
 from django.http import JsonResponse
 import datetime
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def LastMonthData(request):
+    days_data = 0
+    check = Graphprefer.objects.filter(user=request.user).exists()
+    if check:
+        user = Graphprefer.objects.get(user=request.user)
+        graph = user.graph
+        month_data = user.month
+        if month_data == '1 Month':
+            days_data = 30
+        elif month_data == '6 Months':
+            days_data = 180
+        elif month_data == '1 Year':
+            days_data = 366
+        else:
+            days_data = 30
+    else:
+        graph = 'bar'
+        days_data = 30
     today_date = datetime.date.today()
-    last_months_ago =today_date - datetime.timedelta(days=30)
+    last_months_ago =today_date - datetime.timedelta(days=days_data)
     expenses = Expense.objects.filter(owner=request.user, date__gte=last_months_ago, date__lte=today_date)
     income = UserIncome.objects.filter(owner=request.user, date__gte=last_months_ago, date__lte=today_date)
     finalresult1= {}
@@ -41,8 +61,46 @@ def LastMonthData(request):
         for y in source_list:
             finalresult2[y]=get_income_source_amount(y)
 
-    return JsonResponse({'expense_category_amount':finalresult1, 'income_source_amount':finalresult2}, safe=False)
+    return JsonResponse({'expense_category_amount':finalresult1, 'income_source_amount':finalresult2, 'type':graph, 'days':month_data}, safe=False)
 
-
+@login_required
 def LastMonth(request):
-    return render(request, 'dashboard/index.html')
+    graph_data = ('bar','horizontalBar','pie','line','radar','doughnut','polarArea')
+    Month_data = ('1 Month','6 Months','1 Year')
+    check = Graphprefer.objects.filter(user=request.user).exists()
+    if check:
+        user = Graphprefer.objects.get(user=request.user)
+    if request.method == 'GET':
+        if check:
+            user_graph = user.graph
+            user_month = user.month
+        else:
+            user_graph = 'bar'
+            user_month = '1 Month'
+        context = {
+            'user_graph':user_graph,
+            'user_month':user_month,
+            'graphs':graph_data,
+            'months':Month_data
+        }
+        return render(request, 'dashboard/index.html', context)
+
+
+    if request.method == 'POST':
+        graph_selected = request.POST['graph']
+        month_selected = request.POST['month']
+        if check:
+            user.graph=graph_selected
+            user.month=month_selected
+            user.save()
+        else:
+            Graphprefer.objects.create(user=request.user, graph=graph_selected, month=month_selected)
+        messages.success(request, 'Changes Saved')
+        context = {
+            'user_graph':graph_selected,
+            'user_month':month_selected,
+            'graphs':graph_data,
+            'months':Month_data
+
+        }
+        return redirect('dashboard-lastmonth')

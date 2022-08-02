@@ -4,11 +4,15 @@ from .models import Source, UserIncome
 from django.core.paginator import Paginator
 from userprefer.models import Userprefer
 from django.contrib import messages
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 import json
 import datetime
 from django.db.models import Sum
-
+import xlwt
+import csv
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
+from xhtml2pdf import pisa
 # Create your views here.
 
 
@@ -46,6 +50,7 @@ def index(request):
     }
     return render(request, 'userincome/index.html', context)
 
+@login_required
 def add_income(request):
     source = Source.objects.all()
     context= {
@@ -76,6 +81,7 @@ def add_income(request):
         messages.success(request, 'Income saved successfully')
         return redirect('income')
 
+@login_required
 def income_edit(request, id):
     income = UserIncome.objects.get(pk=id)
     sources = Source.objects.all()
@@ -115,7 +121,7 @@ def income_edit(request, id):
         messages.success(request, 'Income Updated successfully')
         return redirect('income')
 
-
+@login_required
 def income_delete(request, id):
     income = UserIncome.objects.get(pk=id)
     income.delete()
@@ -148,7 +154,94 @@ def income_summery(request):
 
     return JsonResponse({'income_source_amount':finalresult}, safe=False)
 
-
+@login_required
 def Income_Stats(request):
     return render(request, 'userincome/stats.html')
 
+@login_required
+def export_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'inline; attachment; filename=Expenses'+str(datetime.datetime.now())+'.csv'
+    writer = csv.writer(response)
+    writer.writerow(['Amount','Source','Category','Date'])
+
+    incomes = UserIncome.objects.filter(owner=request.user)
+
+    for income in incomes:
+        writer.writerow([income.amount, income.source, income.category, income.date])
+
+    return response
+
+
+@login_required
+def export_excel(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=Expenses'+str(datetime.datetime.now())+'.xls'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Income')
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+
+    columns = ['Amount','Source','Category','Date']
+
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    font_style =  xlwt.XFStyle()
+
+    rows = UserIncome.objects.filter(owner=request.user).values_list('amount','source','category','date')
+
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, str(row[col_num]), font_style)
+
+    wb.save(response)
+    return response
+
+@login_required
+def export_pdf(request):
+    domain_data = 'http://'+get_current_site(request).domain
+    date = datetime.datetime.now
+    user = request.user
+    income = UserIncome.objects.filter(owner=request.user)
+    sum = income.aggregate(Sum('amount'))
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; attachment; filename=Expenses'+str(datetime.datetime.now())+'.pdf'
+    response['Content-Transfer-Encoding'] ='binary'
+    context = {
+        'incomes':income,
+        'total':sum,
+        'date':date,
+        'user':user,
+        'domain':domain_data
+    }
+    html_string = render_to_string('userincome/pdf-output.html', context)
+
+    pisa_status = pisa.CreatePDF(html_string, dest=response)
+    if pisa_status.err:
+        return HttpResponse('not found')
+    return response
+
+
+
+    # response = HttpResponse(content_type='application/pdf')
+    # response['Content-Disposition'] = 'inline; attachment; filename=Expenses'+str(datetime.datetime.now())+'.pdf'
+    # response['Content-Transfer-Encoding'] ='binary'
+
+    # expenses = Expense.objects.filter(owner=request.user)
+    # sum = expenses.aggregate(Sum('amount'))
+
+    # html_string = render_to_string('learn/pdf-output.html', {'expenses':expenses,'total':sum})
+    # html = HTML(string=html_string)
+    # result = html.write_pdf()
+
+    # with tempfile.NamedTemporaryFile(delete=True) as output:
+    #     output.write(result)
+    #     output.flush()
+
+    #     output = open(output.name, 'rb')
+    #     response.write(output.read())
+
+    # return response

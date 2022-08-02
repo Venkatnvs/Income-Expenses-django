@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>PDF Output</title>
     <meta charset="UTF-8" />
@@ -117,25 +118,25 @@
         <hr class="hr" >
     </header>
     <div class="container">
-        <h2>Expenses List</h2>
+        <h2>Income List</h2>
         <table class="table" style="overflow-x:auto">
             <thead class="thead">
                 <tr>
                     <th>No</th>
                     <th>Amount</th>
-                    <th>Category</th>
+                    <th>Source</th>
                     <th>Description</th>
                     <th>Date</th>
                 </tr>
             </thead>
             <tbody class="tbody">
-                {% for expense in expenses %}
+                {% for income in incomes %}
                 <tr>
                     <td>{{forloop.counter}}</td>
-                    <td>{{expense.amount}}</td>
-                    <td>{{expense.category}}</td>
-                    <td>{{expense.decription}}</td>
-                    <td>{{expense.date}}</td>
+                    <td>{{income.amount}}</td>
+                    <td>{{income.source}}</td>
+                    <td>{{income.decription}}</td>
+                    <td>{{income.date}}</td>
                 </tr>
                 {% endfor%}
                 <tr class="total">

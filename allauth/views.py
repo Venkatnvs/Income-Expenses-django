@@ -134,7 +134,7 @@ class Login(View):
                 if user.is_active:
                     auth.login(request, user)
                     messages.success(request, 'Welcome '+user.username+' You are now loggined')
-                    return redirect('home')
+                    return redirect('dashboard-lastmonth')
 
                 messages.error(request, 'Account is not activated, Please check your email')
                 return render(request, 'allauth/login.html')

@@ -6,9 +6,10 @@ from django.contrib import messages
 from .models import Userprefer
 from learn.models import Category
 from userincome.models import Source
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
-
+@login_required
 def index(request):
     category = Category.objects.all()
     source = Source.objects.all()
@@ -37,6 +38,7 @@ def index(request):
         messages.success(request, 'Changes Saved')
         return render(request, 'userprefer/index.html', {'currencies':currency_data, 'user_prefer':user_prefer, 'category':category, 'source':source})
 
+@login_required
 def AddCategory(request):
     if request.method =='GET':
         return render(request, 'userprefer/add-category.html')
@@ -53,6 +55,7 @@ def AddCategory(request):
         messages.success(request, 'Category created successfully')
         return redirect('preferences')
 
+@login_required
 def AddSource(request):
     if request.method =='GET':
         return render(request, 'userprefer/add-source.html')
@@ -69,7 +72,7 @@ def AddSource(request):
         messages.success(request, 'Source created successfully')
         return redirect('preferences')
 
-
+@login_required
 def EditSource(request, id):
     if request.method == 'GET':
         source = Source.objects.get(pk=id)
@@ -96,7 +99,7 @@ def EditSource(request, id):
         return redirect('preferences')
 
 
-
+@login_required
 def SourceDelete(request, id):
     source = Source.objects.get(pk=id)
     source.delete()
@@ -104,7 +107,7 @@ def SourceDelete(request, id):
     return redirect('preferences')
 
 
-
+@login_required
 def EditCategory(request, id):
     if request.method == 'GET':
         category = Category.objects.get(pk=id)
@@ -131,7 +134,7 @@ def EditCategory(request, id):
         return redirect('preferences')
 
 
-
+@login_required
 def CategoryDelete(request, id):
     category = Category.objects.get(pk=id)
     category.delete()

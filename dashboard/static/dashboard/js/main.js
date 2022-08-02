@@ -1,11 +1,11 @@
-const renderChat1 = (data1, labels1) => {
+const renderChat1 = (data1, labels1,type,days) => {
     const ctx1 = document.getElementById('myChart1').getContext('2d');
     const myChart1 = new Chart(ctx1, {
-        type: 'horizontalBar',
+        type: type,
         data: {
             labels: labels1,
             datasets: [{
-                label: 'Last 1 months epenses',
+                label: `Last ${days} epenses`,
                 data: data1,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
@@ -35,14 +35,14 @@ const renderChat1 = (data1, labels1) => {
     });
 
 };
-const renderChat2 = (data2, labels2) => {
+const renderChat2 = (data2, labels2,type,days) => {
     const ctx2 = document.getElementById('myChart2').getContext('2d');
     const myChart2 = new Chart(ctx2, {
-        type: 'doughnut',
+        type: type,
         data: {
             labels: labels2,
             datasets: [{
-                label: 'Last 1 months income',
+                label: `Last ${days} income`,
                 data: data2,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
@@ -86,8 +86,11 @@ const getChartData=()=>{
             Object.keys(source_data),
             Object.values(source_data),
         ];
-        renderChat1(data1,labels1);
-        renderChat2(data2,labels2);
+        const type = result.type;
+        const days = result.days;
+        console.log('type',days)
+        renderChat1(data1,labels1,type,days);
+        renderChat2(data2,labels2,type,days);
     });
 };
 
