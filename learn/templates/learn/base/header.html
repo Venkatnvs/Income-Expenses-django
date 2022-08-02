@@ -8,7 +8,10 @@
         aria-label="Search" />
     <div class="navbar-nav">
         <div class="nav-item text-nowrap">
-            <a class="nav-link text-light px-3" href="#">Sign out</a>
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <input class="nav-link text-dark px-2" type="submit" value="Sign out">
+            </form>
         </div>
     </div>
 </header>

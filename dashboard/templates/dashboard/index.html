@@ -1,0 +1,61 @@
+{% extends 'learn/base/index.html' %}
+{% load static %}
+{% block title %}
+DASHBOARD
+{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+    {% include 'allauth/messages.html' %}
+    <h3>DASHBOARD</h3>
+    <hr>
+    <form action="{% url 'dashboard-lastmonth' %}" method="post">
+        {% csrf_token %}
+    <div class="row">
+            <div class="col-md-4">
+                <h5 class="text-decoration-underline">Last {{user_month}} Expenses and Income</h5>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col input-group-sm text-center">
+                <label class="text text-primary mt-2">Months</label>&nbsp;
+                <select name="month" class="form-select-sm" id="inputGroupSelect04">
+                    {% for month in months %}
+                    <option {% if user_month == month %} selected {% endif %} name="month" value="{{month}}">
+                        {{month}}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col input-group-sm text-center">
+                <label class="text text-primary mt-2">Graph</label>&nbsp;
+                <select name="graph" class="form-select-sm" id="inputGroupSelect04">
+                    {% for graph in graphs %}
+                    <option {% if user_graph == graph %} selected {% endif %} name="graph" value="{{graph}}">
+                        {{graph}}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col text-center mt-2">
+                <input class="btn btn-outline-secondary" type="submit" value="Save" />
+            </div>
+        </form>
+
+        <div class="row">
+            <div class="col">
+            </div>
+        </div>
+        <div class="col">
+            <canvas id="myChart1" width="auto" height="auto"></canvas>
+        </div>
+        <div class="col">
+            <canvas id="myChart2" width="auto" height="auto"></canvas>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block script %}
+<script src="{% static 'dashboard/js/main.js' %}"></script>
+{% endblock %}

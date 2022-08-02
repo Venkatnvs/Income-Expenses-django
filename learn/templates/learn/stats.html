@@ -1,0 +1,36 @@
+{% extends 'learn/base/index.html' %}
+{% load static %}
+{% block title %}
+Expenses Summery
+{% endblock %}
+
+{% block styles %}
+<link href="{% static 'learn/css/common.css' %}" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+    {% include 'allauth/messages.html' %}
+    <div class="row">
+    <div class="col">
+        <div class="container nvsmain pt-2 pb-1">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Expenses Summery</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Summery</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <a href="{% url 'home' %}" class="btn btn-primary">Back</a>
+    </div>
+    </div>
+    <canvas id="myChart" width="auto" height="auto"></canvas>
+</div>
+{% endblock %}
+
+
+{% block script %}
+<script src="{% static 'learn/js/stats.js' %}"></script>
+{% endblock %}
