@@ -1,25 +1,10 @@
-const usernameField=document.querySelector('#inputname');
+const usernameField=document.querySelector('#inputusername');
 const emailField=document.querySelector('#inputemail');
-const passwordField=document.querySelector('#inputpassword');
 const userfeedback=document.querySelector('.invalid-username-feedback');
 const emailfeedback=document.querySelector('.invalid-email-feedback');
 const usernamesuccess=document.querySelector('.username-success');
 const emailsuccess=document.querySelector('.email-success');
-const showpassword=document.querySelector('.password-toggle');
 const submitbtn=document.querySelector('.submit-btn');
-
-const handleToggle = (e) => {
-    if (showpassword.textContent === 'SHOW') {
-        showpassword.textContent = 'HIDE';
-        passwordField.setAttribute("type","text");
-    }else {
-        showpassword.textContent = 'SHOW';
-        passwordField.setAttribute("type","password");
-
-    }
-};
-
-showpassword.addEventListener("click", handleToggle);
 
 
 emailField.addEventListener("keyup", (e) => {

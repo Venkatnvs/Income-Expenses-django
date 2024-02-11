@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 
-# Create your models here.
 class UserIncome(models.Model):
     amount = models.FloatField()
     date = models.DateField(default=now)
@@ -21,6 +20,3 @@ class Source(models.Model):
 
     def __str__(self):
         return self.name
-
-
-            

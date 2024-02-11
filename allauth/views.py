@@ -1,5 +1,3 @@
-import imp
-from django import views
 from django.shortcuts import redirect, render
 from django.views import View
 import json
@@ -17,14 +15,13 @@ from django.contrib import auth
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 import threading
 
-# Create your views here.
 class EmailThread(threading.Thread):
     def __init__(self, email):
         self.email = email
         threading.Thread.__init__(self)
 
     def run(self):
-        self.email.send(fail_silently=False)
+        self.email.send(fail_silently=True)
 
 
 class Registration(View):
