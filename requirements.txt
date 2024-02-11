@@ -1,0 +1,6 @@
+django
+validate_email
+xlwt
+xhtml2pdf2
+python-decouple
+whitenoise
