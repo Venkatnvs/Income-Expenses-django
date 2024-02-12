@@ -1,5 +1,5 @@
 from django.urls import path
-from learn import views
+from userexpense import views
 from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [

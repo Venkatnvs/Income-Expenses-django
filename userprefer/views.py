@@ -4,11 +4,10 @@ import json
 from django.conf import settings
 from django.contrib import messages
 from .models import Userprefer
-from learn.models import Category
+from userexpense.models import Category
 from userincome.models import Source
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
 @login_required
 def index(request):
     category = Category.objects.all()

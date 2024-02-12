@@ -1,5 +1,5 @@
 from django.shortcuts import redirect, render
-from learn.models import Expense
+from userexpense.models import Expense
 from userincome.models import UserIncome
 from .models import Graphprefer
 from django.http import JsonResponse
@@ -7,7 +7,6 @@ import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-# Create your views here.
 def LastMonthData(request):
     days_data = 0
     check = Graphprefer.objects.filter(user=request.user).exists()
