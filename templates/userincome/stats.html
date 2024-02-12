@@ -1,16 +1,16 @@
-{% extends 'learn/base/index.html' %}
+{% extends 'base/index.html' %}
 {% load static %}
 {% block title %}
-Income summery
+Income summery | {{site_name}}
 {% endblock %}
 
 {% block styles %}
-<link href="{% static 'learn/css/common.css' %}" rel="stylesheet" />
+<link href="{% static 'main/css/common.css' %}" rel="stylesheet" />
 {% endblock %}
 
 {% block content %}
 <div class="container mt-3">
-    {% include 'allauth/messages.html' %}
+    {% include 'base/messages.html' %}
     <div class="row">
     <div class="col">
         <div class="container nvsmain pt-2 pb-1">
@@ -31,6 +31,6 @@ Income summery
 {% endblock %}
 
 
-{% block script %}
+{% block scripts %}
 <script src="{% static 'userincome/js/stats.js' %}"></script>
 {% endblock %}

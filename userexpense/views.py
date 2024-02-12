@@ -47,7 +47,7 @@ def home(request):
         'currency':currency,
         'sum':sum['amount__sum']
     }
-    return render(request, 'learn/main.html', context)
+    return render(request, 'userexpense/main.html', context)
 
 def add_expense(request):
     categories = Category.objects.all()
@@ -56,7 +56,7 @@ def add_expense(request):
         'values':request.POST
         }
     if request.method == 'GET':
-        return render(request, 'learn/add_expense.html', context)
+        return render(request, 'userexpense/add_expense.html', context)
 
     if request.method == 'POST':
         amount = request.POST['amount']
@@ -65,16 +65,16 @@ def add_expense(request):
         category = request.POST['category']
         if not amount:
             messages.error(request, 'Amount is required')
-            return render(request, 'learn/add_expense.html', context)
+            return render(request, 'userexpense/add_expense.html', context)
         if not decription:
             messages.error(request, 'Decription is required')
-            return render(request, 'learn/add_expense.html', context)
+            return render(request, 'userexpense/add_expense.html', context)
         if category == 'Choose...':
             messages.error(request, 'Category is required')
-            return render(request, 'learn/add_expense.html', context)
+            return render(request, 'userexpense/add_expense.html', context)
         if not date:
             messages.error(request, 'Date is required')
-            return render(request, 'learn/add_expense.html', context)
+            return render(request, 'userexpense/add_expense.html', context)
         Expense.objects.create(owner=request.user, amount=amount, date=date, category=category, decription=decription)
         messages.success(request, 'Expense saved successfully')
         return redirect('home')
@@ -90,7 +90,7 @@ def expense_edit(request, id):
         'categories':categories
         }
     if request.method == 'GET':
-        return render(request, 'learn/expense-edit.html', context)
+        return render(request, 'userexpense/expense-edit.html', context)
 
     if request.method == 'POST':
         amount = request.POST['amount']
@@ -99,16 +99,16 @@ def expense_edit(request, id):
         category = request.POST['category']
         if not amount:
             messages.error(request, 'Amount is required')
-            return render(request, 'learn/expense-edit.html', context)
+            return render(request, 'userexpense/expense-edit.html', context)
         if not decription:
             messages.error(request, 'Decription is required')
-            return render(request, 'learn/expense-edit.html', context)
+            return render(request, 'userexpense/expense-edit.html', context)
         if category == 'Choose...':
             messages.error(request, 'Category is required')
-            return render(request, 'learn/expense-edit.html', context)
+            return render(request, 'userexpense/expense-edit.html', context)
         if not date:
             messages.error(request, 'Date is required')
-            return render(request, 'learn/expense-edit.html', context)
+            return render(request, 'userexpense/expense-edit.html', context)
 
         expense.owner=request.user
         expense.amount=amount
@@ -153,7 +153,7 @@ def expenses_summery(request):
 
 @login_required
 def Expenses_Stats(request):
-    return render(request, 'learn/stats.html')
+    return render(request, 'userexpense/stats.html')
 
 
 @login_required
@@ -214,7 +214,7 @@ def export_pdf(request):
         'user':user,
         'domain':domain_data
     }
-    html_string = render_to_string('learn/pdf-output.html', context)
+    html_string = render_to_string('userexpense/pdf-output.html', context)
 
     pisa_status = pisa.CreatePDF(html_string, dest=response)
     if pisa_status.err:

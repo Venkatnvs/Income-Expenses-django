@@ -1,11 +1,12 @@
-{% extends 'learn/base/index.html' %}
+{% extends 'base/index.html' %}
 {% load static %}
 {% block title %}
-Edit Income
-{% endblock %}
+Edit Income | {{site_name}}
+{% endblock title %}
+
 {% block styles %}
-<link href="{% static 'learn/css/common.css' %}" rel="stylesheet" />
-{% endblock %}
+<link href="{% static 'main/css/common.css' %}" rel="stylesheet" />
+{% endblock styles %}
 
 {% block content %}
 <div class="container mt-3">
@@ -29,7 +30,7 @@ Edit Income
     <div class="card-body">
             <form action="{% url 'income-edit' income.id %}" method="post">
             {% csrf_token %}
-            {% include 'allauth/messages.html' %}
+            {% include 'base/messages.html' %}
             <div class="form-group mb-2">
                 <label for="inputamount">Amount</label>
                 <input type="number" class="form-control form-control-sm" name="amount" id="inputamount" value="{{values.amount}}">

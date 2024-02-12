@@ -1,4 +1,4 @@
-{% extends 'learn/base/index.html' %}
+{% extends 'base/index.html' %}
 {% load static %}
 {% block title %}
 DASHBOARD
@@ -6,7 +6,7 @@ DASHBOARD
 
 {% block content %}
 <div class="container mt-3">
-    {% include 'allauth/messages.html' %}
+    {% include 'base/messages.html' %}
     <h3>DASHBOARD</h3>
     <hr>
     <form action="{% url 'dashboard-lastmonth' %}" method="post">

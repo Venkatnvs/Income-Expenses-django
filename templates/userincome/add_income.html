@@ -1,27 +1,28 @@
-{% extends 'learn/base/index.html' %}
+{% extends 'base/index.html' %}
 {% load static %}
 {% block title %}
-Add Income
-{% endblock %}
+Add Income | {{site_name}}
+{% endblock title %}
+
 {% block styles %}
-<link href="{% static 'learn/css/common.css' %}" rel="stylesheet" />
-{% endblock %}
+<link href="{% static 'main/css/common.css' %}" rel="stylesheet" />
+{% endblock styles %}
 
 {% block content %}
 <div class="container mt-3">
 <div class="container nvsmain pt-2 pb-1">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'home' %}">Income</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'income' %}">Income</a></li>
             <li class="breadcrumb-item active" aria-current="page">Add Income</li>
         </ol>
     </nav>
 </div>
 <div class="card mt-3">
-    <div class="card-body">
+    <div class="card-body pt-2">
             <form action="{% url 'add-income' %}" method="post">
             {% csrf_token %}
-            {% include 'allauth/messages.html' %}
+            {% include 'base/messages.html' %}
             <div class="form-group mb-2">
                 <label for="inputamount">Amount</label>
                 <input type="number" class="form-control form-control-sm" name="amount" id="inputamount" value="{{values.amount}}">
@@ -49,4 +50,4 @@ Add Income
     </div>
 
 </div>
-{% endblock %}
+{% endblock content %}

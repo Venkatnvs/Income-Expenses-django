@@ -1,16 +1,16 @@
-{% extends 'learn/base/index.html' %}
+{% extends 'base/index.html' %}
 {% load static %}
 {% block title %}
-Income
-{% endblock %}
+Income | {{site_name}}
+{% endblock title %}
 
 {% block styles %}
-<link href="{% static 'learn/css/common.css' %}" rel="stylesheet" />
-{% endblock %}
+<link href="{% static 'main/css/common.css' %}" rel="stylesheet" />
+{% endblock styles %}
 
 {% block content %}
 <div class="container mt-3">
-    {% include 'allauth/messages.html' %}
+    {% include 'base/messages.html' %}
     <div class="row">
     <div class="col">
         <div class="container nvsmain pt-2 pb-1">
@@ -117,9 +117,9 @@ Income
         </div>
         </div>
 </div>
-{% endblock %}
+{% endblock content %}
 
 
-{% block script %}
+{% block scripts %}
 <script src="{% static 'userincome/js/income.js' %}"></script>
-{% endblock %}
+{% endblock scripts %}

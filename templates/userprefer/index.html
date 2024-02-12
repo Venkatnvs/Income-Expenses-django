@@ -1,8 +1,9 @@
-{% extends 'learn/base/index.html' %} 
-{% block title %} General Settings {%endblock %} 
+{% extends 'base/index.html' %} 
+{% block title %} General Settings | {{site_name}} {%endblock %}
+
 {% block content %}
 <div class="container mt-3">
-    {% include 'allauth/messages.html' %}
+    {% include 'base/messages.html' %}
     <h3>Prefered currency</h3>
     <form action="{% url 'preferences' %}" method="post">
         {% csrf_token %}
@@ -21,7 +22,7 @@
                 </option>
                 {% endfor %}
             </select>
-            <input class="btn btn-outline-secondary" type="submit" value="Save" />
+            <input class="btn btn-outline-success" type="submit" value="Save" />
         </div>
     </form>
 
