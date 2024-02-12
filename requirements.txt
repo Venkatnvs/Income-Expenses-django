@@ -4,3 +4,7 @@ xlwt
 xhtml2pdf2
 python-decouple
 whitenoise
+gunicorn
+dj-database-url
+psycopg2-binary
+urllib3==1.26.6
