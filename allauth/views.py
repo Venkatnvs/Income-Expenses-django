@@ -66,6 +66,7 @@ class Registration(View):
                 EmailThread(email).start()
 
 
+                messages.info(request, 'A Verification Email Have been Sent.')
                 messages.success(request, 'Account successfully created')
                 return render(request, 'allauth/register.html')
 
