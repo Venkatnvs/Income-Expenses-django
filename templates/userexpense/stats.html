@@ -2,11 +2,11 @@
 {% load static %}
 {% block title %}
 Expenses Summery | {{site_name}}
-{% endblock %}
+{% endblock title %}
 
 {% block styles %}
 <link href="{% static 'main/css/common.css' %}" rel="stylesheet" />
-{% endblock %}
+{% endblock styles %}
 
 {% block content %}
 <div class="container mt-3">
@@ -26,7 +26,9 @@ Expenses Summery | {{site_name}}
         <a href="{% url 'home' %}" class="btn btn-primary">Back</a>
     </div>
     </div>
-    <canvas id="myChart" width="auto" height="auto"></canvas>
+    <div style="max-height: 350px;" class="row d-flex justify-content-center">
+        <canvas id="myChart" width="auto" height="auto"></canvas>
+    </div>
 </div>
 {% endblock content %}
 

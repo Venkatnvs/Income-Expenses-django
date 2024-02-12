@@ -64,7 +64,7 @@ def LastMonthData(request):
 
 @login_required
 def LastMonth(request):
-    graph_data = ('bar','horizontalBar','pie','line','radar','doughnut','polarArea')
+    graph_data = ('bar','pie','line','radar','doughnut','polarArea')
     Month_data = ('1 Month','6 Months','1 Year')
     check = Graphprefer.objects.filter(user=request.user).exists()
     if check:

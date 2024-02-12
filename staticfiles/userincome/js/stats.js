@@ -3,10 +3,8 @@ const renderChat = (data, labels) => {
     const getRandomType = () => {
         const types = [
           "bar",
-          "horizontalBar",
           "pie",
           "line",
-          "radar",
           "doughnut",
           "polarArea",
         ];

@@ -159,7 +159,7 @@ def Expenses_Stats(request):
 @login_required
 def export_csv(request):
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'inline; attachment; filename=Expenses'+str(datetime.datetime.now())+'.csv'
+    response['Content-Disposition'] = 'attachment; filename=Expenses'+str(datetime.datetime.now())+'.csv'
     writer = csv.writer(response)
     writer.writerow(['Amount','Decription','Category','Date'])
 

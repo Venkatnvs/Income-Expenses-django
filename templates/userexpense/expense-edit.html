@@ -1,10 +1,10 @@
-{% extends 'learn/base/index.html' %}
+{% extends 'base/index.html' %}
 {% load static %}
 {% block title %}
 Edit Expenses
 {% endblock %}
 {% block styles %}
-<link href="{% static 'learn/css/common.css' %}" rel="stylesheet" />
+<link href="{% static 'main/css/common.css' %}" rel="stylesheet" />
 {% endblock %}
 
 {% block content %}
@@ -26,10 +26,10 @@ Edit Expenses
 </div>
 
 <div class="card mt-3">
-    <div class="card-body">
+    <div class="card-body pt-2">
             <form action="{% url 'expense-edit' expense.id %}" method="post">
             {% csrf_token %}
-            {% include 'allauth/messages.html' %}
+            {% include 'base/messages.html' %}
             <div class="form-group mb-2">
                 <label for="inputamount">Amount</label>
                 <input type="number" class="form-control form-control-sm" name="amount" id="inputamount" value="{{values.amount}}">

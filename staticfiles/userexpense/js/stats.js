@@ -26,7 +26,7 @@ const renderChat = (data, labels) => {
                 borderWidth: 1
             }]
         },
-        options: {
+        options: {           
             title: {
                 display: true,
                 text: 'Expenses per category'

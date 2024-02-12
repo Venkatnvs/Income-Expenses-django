@@ -161,14 +161,14 @@ def Income_Stats(request):
 @login_required
 def export_csv(request):
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'inline; attachment; filename=Expenses'+str(datetime.datetime.now())+'.csv'
+    response['Content-Disposition'] = 'attachment; filename=Expenses'+str(datetime.datetime.now())+'.csv'
     writer = csv.writer(response)
-    writer.writerow(['Amount','Source','Category','Date'])
+    writer.writerow(['Amount','Decription','Source','Date'])
 
     incomes = UserIncome.objects.filter(owner=request.user)
 
     for income in incomes:
-        writer.writerow([income.amount, income.source, income.category, income.date])
+        writer.writerow([income.amount, income.decription, income.source, income.date])
 
     return response
 
@@ -183,14 +183,14 @@ def export_excel(request):
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
 
-    columns = ['Amount','Source','Category','Date']
+    columns = ['Amount','Decription','Source','Date']
 
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
 
     font_style =  xlwt.XFStyle()
 
-    rows = UserIncome.objects.filter(owner=request.user).values_list('amount','source','category','date')
+    rows = UserIncome.objects.filter(owner=request.user).values_list('amount','decription','source','date')
 
     for row in rows:
         row_num += 1
@@ -208,7 +208,7 @@ def export_pdf(request):
     income = UserIncome.objects.filter(owner=request.user)
     sum = income.aggregate(Sum('amount'))
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'inline; attachment; filename=Expenses'+str(datetime.datetime.now())+'.pdf'
+    response['Content-Disposition'] = 'inline; filename=Expenses_'+str(datetime.datetime.now())+'.pdf'
     response['Content-Transfer-Encoding'] ='binary'
     context = {
         'incomes':income,
@@ -223,25 +223,3 @@ def export_pdf(request):
     if pisa_status.err:
         return HttpResponse('not found')
     return response
-
-
-
-    # response = HttpResponse(content_type='application/pdf')
-    # response['Content-Disposition'] = 'inline; attachment; filename=Expenses'+str(datetime.datetime.now())+'.pdf'
-    # response['Content-Transfer-Encoding'] ='binary'
-
-    # expenses = Expense.objects.filter(owner=request.user)
-    # sum = expenses.aggregate(Sum('amount'))
-
-    # html_string = render_to_string('learn/pdf-output.html', {'expenses':expenses,'total':sum})
-    # html = HTML(string=html_string)
-    # result = html.write_pdf()
-
-    # with tempfile.NamedTemporaryFile(delete=True) as output:
-    #     output.write(result)
-    #     output.flush()
-
-    #     output = open(output.name, 'rb')
-    #     response.write(output.read())
-
-    # return response
